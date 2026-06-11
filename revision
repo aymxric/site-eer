@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Révisions Terminale — Maths & Physique</title>
+<style>
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --ink:       #0f0f11;
+  --ink2:      #3a3a46;
+  --ink3:      #7a7a8e;
+  --paper:     #fafaf8;
+  --surface:   #ffffff;
+  --rule:      #e8e8ee;
+
+  --math-h:    #1e3a5f;   /* bleu nuit */
+  --math-a:    #2563eb;   /* bleu vif */
+  --math-bg:   #eff5ff;
+
+  --phys-h:    #1f3a2e;   /* vert forêt */
+  --phys-a:    #16a34a;   /* vert vif */
+  --phys-bg:   #f0faf3;
+
+  --ok-bg:     #d1fae5; --ok-txt: #065f46;
+  --ko-bg:     #fee2e2; --ko-txt: #991b1b;
+
+  --r: 12px; --r-sm: 7px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ── RESET ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100dvh;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+.topbar {
+  background: var(--ink);
+  color: #fff;
+  padding: .9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.topbar-title { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+.topbar-sub   { font-size: 12px; opacity: .55; margin-left: auto; }
+.prog-pill {
+  background: rgba(255,255,255,.15);
+  border-radius: 30px;
+  padding: 3px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ── HOME ────────────────────────────────────────────── */
+.home { padding: 1.5rem 1.25rem; }
+
+.hero-strip {
+  background: var(--ink);
+  border-radius: var(--r);
+  padding: 1.75rem 1.5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 30px,
+    rgba(255,255,255,.03) 30px,
+    rgba(255,255,255,.03) 31px
+  );
+}
+.hero-eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .5; margin-bottom: .5rem; }
+.hero-h { font-size: 26px; font-weight: 800; line-height: 1.15; margin-bottom: .5rem; }
+.hero-p { font-size: 13px; opacity: .65; line-height: 1.6; }
+.hero-stats { display: flex; gap: 1.5rem; margin-top: 1.25rem; }
+.stat-item .val { font-size: 22px; font-weight: 800; }
+.stat-item .lbl { font-size: 11px; opacity: .55; }
+
+.subject-cards { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; margin-bottom: 1.5rem; }
+.subject-card {
+  border-radius: var(--r);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  border: 1.5px solid transparent;
+}
+.subject-card:active { transform: scale(.97); }
+.subject-card.math { background: var(--math-bg); border-color: #c7d9f8; }
+.subject-card.phys { background: var(--phys-bg); border-color: #b3dfc2; }
+.sc-icon { font-size: 28px; margin-bottom: .625rem; display: block; }
+.sc-name { font-size: 14px; font-weight: 700; margin-bottom: .2rem; }
+.sc-name.math { color: var(--math-h); }
+.sc-name.phys { color: var(--phys-h); }
+.sc-sub { font-size: 12px; color: var(--ink3); }
+.sc-count { font-size: 11px; font-weight: 700; margin-top: .625rem; padding: 2px 7px; border-radius: 20px; display: inline-block; }
+.sc-count.math { background: var(--math-bg); color: var(--math-a); border: 1px solid #93b8f5; }
+.sc-count.phys { background: var(--phys-bg); color: var(--phys-a); border: 1px solid #86c99d; }
+
+.section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3);
+  margin-bottom: .75rem;
+}
+
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.quick-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.quick-card:hover { border-color: var(--ink3); }
+.qc-label { font-size: 13px; font-weight: 600; margin-bottom: .2rem; }
+.qc-sub { font-size: 12px; color: var(--ink3); }
+.qc-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 20px; margin-top: .5rem; display: inline-block;
+}
+.badge-math { background: var(--math-bg); color: var(--math-a); }
+.badge-phys { background: var(--phys-bg); color: var(--phys-a); }
+
+/* ── SUBJECT PAGE ────────────────────────────────────── */
+.subject-page { display: none; }
+.subject-page.active { display: block; }
+
+.sp-header {
+  padding: 1.5rem 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+.back-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; flex-shrink: 0;
+  transition: background .15s;
+}
+.back-btn:hover { background: var(--paper); }
+.sp-header-text h2 { font-size: 18px; font-weight: 800; }
+.sp-header-text p  { font-size: 12px; color: var(--ink3); }
+
+.sp-tabs {
+  display: flex;
+  border-bottom: 1.5px solid var(--rule);
+  padding: 0 1.25rem;
+  gap: 0;
+  margin-bottom: 1.25rem;
+}
+.sp-tab {
+  padding: .625rem 1rem;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  color: var(--ink3);
+  background: none;
+  border-top: none; border-left: none; border-right: none;
+  font-family: var(--font);
+  transition: color .15s;
+  margin-bottom: -1.5px;
+}
+.sp-tab.active.math { color: var(--math-a); border-bottom-color: var(--math-a); }
+.sp-tab.active.phys { color: var(--phys-a); border-bottom-color: var(--phys-a); }
+.sp-tab:not(.active):hover { color: var(--ink2); }
+
+.sp-content { padding: 0 1.25rem 2rem; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ── FICHES ──────────────────────────────────────────── */
+.fiche {
+  border-radius: var(--r);
+  border: 1.5px solid var(--rule);
+  background: var(--surface);
+  margin-bottom: .75rem;
+  overflow: hidden;
+}
+.fiche-header {
+  padding: .875rem 1rem;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  user-select: none;
+  transition: background .1s;
+}
+.fiche-header:hover { background: var(--paper); }
+.fiche-header .chev { font-size: 12px; color: var(--ink3); transition: transform .2s; }
+.fiche.open .fiche-header .chev { transform: rotate(180deg); }
+.fiche-body {
+  display: none;
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--rule);
+}
+.fiche.open .fiche-body { display: block; }
+.fiche-body p { font-size: 13px; color: var(--ink2); line-height: 1.7; margin-top: .75rem; }
+.fiche-body ul { padding-left: 1.1rem; margin-top: .4rem; }
+.fiche-body li { font-size: 13px; color: var(--ink2); line-height: 1.7; margin-bottom: .2rem; }
+.fiche-body strong { color: var(--ink); }
+.formula {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: .5rem .875rem;
+  border-radius: var(--r-sm);
+  margin: .5rem 0;
+  line-height: 1.5;
+}
+.formula.math { background: var(--math-bg); border-left: 3px solid var(--math-a); color: var(--math-h); }
+.formula.phys { background: var(--phys-bg); border-left: 3px solid var(--phys-a); color: var(--phys-h); }
+
+/* ── QCM ─────────────────────────────────────────────── */
+.qcm-toolbar {
+  display: flex; align-items: center; gap: .625rem;
+  margin-bottom: 1rem; flex-wrap: wrap;
+}
+.qcm-toolbar label { font-size: 13px; color: var(--ink3); }
+.qcm-toolbar select {
+  padding: 6px 10px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer;
+}
+.btn {
+  padding: 7px 16px;
+  border-radius: var(--r-sm);
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid transparent;
+  transition: opacity .15s, transform .1s;
+}
+.btn:active { transform: scale(.97); }
+.btn-math { background: var(--math-a); color: #fff; border-color: var(--math-a); }
+.btn-phys { background: var(--phys-a); color: #fff; border-color: var(--phys-a); }
+
+.score-strip {
+  border-radius: var(--r);
+  padding: .875rem 1rem;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 1rem;
+  display: none;
+}
+.score-strip.math { background: var(--math-bg); }
+.score-strip.phys { background: var(--phys-bg); }
+.score-big { font-size: 28px; font-weight: 800; }
+.score-big.math { color: var(--math-a); }
+.score-big.phys { color: var(--phys-a); }
+.score-info { font-size: 13px; color: var(--ink2); }
+.score-info span { font-weight: 700; }
+
+.qitem {
+  background: var(--surface);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--r);
+  padding: 1.1rem;
+  margin-bottom: .75rem;
+}
+.qitem-q { font-size: 14px; font-weight: 600; line-height: 1.5; margin-bottom: .875rem; }
+.qnum { font-weight: 400; color: var(--ink3); margin-right: .3rem; }
+.opts { display: flex; flex-direction: column; gap: 6px; }
+.opt {
+  padding: .6rem .875rem;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font); font-size: 13px;
+  text-align: left; cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+.opt:hover:not(:disabled) { border-color: var(--ink3); background: var(--paper); }
+.opt:disabled { cursor: default; }
+.opt.correct { background: var(--ok-bg); border-color: #34d399; color: var(--ok-txt); font-weight: 600; }
+.opt.wrong   { background: var(--ko-bg); border-color: #f87171; color: var(--ko-txt); }
+.fb {
+  font-size: 12px; line-height: 1.55;
+  border-radius: var(--r-sm);
+  padding: .5rem .75rem;
+  margin-top: .625rem;
+  display: none;
+}
+.fb.ok { background: var(--ok-bg); color: var(--ok-txt); }
+.fb.ko { background: var(--ko-bg); color: var(--ko-txt); }
+
+/* ── FORMULAS PAGE ───────────────────────────────────── */
+.formula-grid { display: grid; gap: .5rem; }
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 380px) {
+  .subject-cards { grid-template-columns: 1fr; }
+  .quick-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-title">📚 Terminale Générale</div>
+  <div class="prog-pill" id="topbar-prog">0 réponses</div>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="home">
+
+  <div class="hero-strip">
+    <div class="hero-eyebrow">Baccalauréat Général 2025</div>
+    <div class="hero-h">Maths &amp;<br>Physique-Chimie</div>
+    <div class="hero-p">Fiches de cours, formules et QCM aléatoires pour tes deux spécialités.</div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="val" id="stat-q">230+</div><div class="lbl">questions</div></div>
+      <div class="stat-item"><div class="val">2</div><div class="lbl">spécialités</div></div>
+      <div class="stat-item"><div class="val" id="stat-rep">0</div><div class="lbl">répondues</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Spécialités</div>
+  <div class="subject-cards">
+    <div class="subject-card math" onclick="openSubject('math')">
+      <span class="sc-icon">📐</span>
+      <div class="sc-name math">Mathématiques</div>
+      <div class="sc-sub">Analyse · Algèbre · Probas · Géométrie</div>
+      <span class="sc-count math">120 questions</span>
+    </div>
+    <div class="subject-card phys" onclick="openSubject('phys')">
+      <span class="sc-icon">⚛️</span>
+      <div class="sc-name phys">Physique-Chimie</div>
+      <div class="sc-sub">Mécanique · Élec · Ondes · Chimie</div>
+      <span class="sc-count phys">110 questions</span>
+    </div>
+  </div>
+
+  <div class="section-title">Accès rapide — cours</div>
+  <div class="quick-grid">
+    <div class="quick-card" onclick="openSubject('math'); setTimeout(()=>switchTab('math','cours'),50)">
+      <div class="qc-label">Dérivées & intégrales</div>
+      <div class="qc-sub">Toutes les formules</div>
+      <span class="qc-badge badge-math">Maths</span>
+    </div>
+    <div class="quick-card" onclick="openSubject('phys'); setTimeout(()=>switchTab('phys','cours'),50)">
+      <div class="qc-label">Mécanique</div>
+      <div class="qc-sub">Lois du mouvement</div>
+      <span class="qc-badge badge-phys">Physique</span>
+    </div>
+    <div class="quick-card" onclick="openSubject('math'); setTimeout(()=>switchTab('math','cours'),50)">
+      <div class="qc-label">Probabilités</div>
+      <div class="qc-sub">Loi normale, intervalles</div>
+      <span class="qc-badge badge-math">Maths</span>
+    </div>
+    <div class="quick-card" onclick="openSubject('phys'); setTimeout(()=>switchTab('phys','cours'),50)">
+      <div class="qc-label">Chimie organique</div>
+      <div class="qc-sub">Réactions & mécanismes</div>
+      <span class="qc-badge badge-phys">Chimie</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ MATHS PAGE ══════════ -->
+<div id="page-math" class="subject-page">
+  <div class="sp-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="sp-header-text">
+      <h2 style="color:var(--math-h)">Mathématiques</h2>
+      <p>Spécialité Terminale Générale</p>
+    </div>
+  </div>
+  <div class="sp-tabs">
+    <button class="sp-tab active math" onclick="switchTab('math','cours')">Cours</button>
+    <button class="sp-tab math" onclick="switchTab('math','qcm')">QCM</button>
+    <button class="sp-tab math" onclick="switchTab('math','formules')">Formulaire</button>
+    <button class="sp-tab math" onclick="switchTab('math','methodes')">Méthodes</button>
+  </div>
+  <div class="sp-content">
+
+    <!-- COURS MATHS -->
+    <div class="tab-pane active" id="math-cours">
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Limites et continuité <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <p>La limite d'une fonction décrit son comportement quand x tend vers une valeur ou l'infini.</p>
+          <ul>
+            <li>Limite infinie : lim f(x) = +∞ quand x → a si f(x) devient arbitrairement grand</li>
+            <li>Formes indéterminées : ∞−∞, 0/0, ∞/∞, 0×∞ → lever l'indétermination</li>
+            <li><strong>Croissances comparées</strong> : eˣ domine xⁿ qui domine ln(x) en +∞</li>
+            <li>Théorème des gendarmes : g ≤ f ≤ h et g→L et h→L ⟹ f→L</li>
+          </ul>
+          <div class="formula math">Règle de l'Hôpital (f/g → 0/0) : lim f/g = lim f'/g'</div>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Dérivation — formules et applications <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li>(xⁿ)' = nxⁿ⁻¹ | (eˣ)' = eˣ | (ln x)' = 1/x</li>
+            <li>(sin x)' = cos x | (cos x)' = −sin x</li>
+            <li>(uv)' = u'v + uv' | (u/v)' = (u'v − uv')/v²</li>
+            <li>(f∘g)'(x) = g'(x)·f'(g(x))</li>
+          </ul>
+          <div class="formula math">(e^u)' = u'·e^u | (ln u)' = u'/u | (uⁿ)' = n·u'·uⁿ⁻¹</div>
+          <p><strong>Applications :</strong> étude de variations (signe de f'), équation de tangente y = f(a) + f'(a)(x−a), extrema locaux.</p>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Intégration <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">∫ₐᵇ f(x) dx = [F(x)]ₐᵇ = F(b) − F(a)</div>
+          <ul>
+            <li>∫ xⁿ dx = xⁿ⁺¹/(n+1) + C | ∫ eˣ dx = eˣ + C | ∫ 1/x dx = ln|x| + C</li>
+            <li>∫ cos x dx = sin x + C | ∫ sin x dx = −cos x + C</li>
+          </ul>
+          <div class="formula math">Intégration par parties : ∫ u·v' = [uv] − ∫ u'·v</div>
+          <div class="formula math">Changement de variable : ∫ f(g(x))g'(x)dx = ∫ f(u) du  (u = g(x))</div>
+          <p><strong>Valeur moyenne</strong> : &lt;f&gt; = (1/(b−a))·∫ₐᵇ f(x)dx</p>
+          <p><strong>Aire entre deux courbes</strong> : A = ∫ₐᵇ |f(x) − g(x)| dx</p>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Équations différentielles <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">y' = ay  →  y = Ke^(at) (K déterminé par CI)</div>
+          <div class="formula math">y' = ay + b  →  y = Ke^(at) − b/a</div>
+          <p>Équation du second ordre : y'' + ω₀²·y = 0 → y = A cos(ω₀t) + B sin(ω₀t)</p>
+          <ul>
+            <li>Identifier le type, trouver une solution particulière, puis la solution homogène</li>
+            <li>Condition initiale : valeur en t=0 pour déterminer K</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Suites numériques <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">Arithmétique : uₙ = u₀ + n·r | Sₙ = (n+1)(u₀+uₙ)/2</div>
+          <div class="formula math">Géométrique : uₙ = u₀·qⁿ | Sₙ = u₀·(1−qⁿ⁺¹)/(1−q) (q≠1)</div>
+          <ul>
+            <li>Suite récurrente linéaire : uₙ₊₁ = a·uₙ + b → chercher le point fixe l = al+b</li>
+            <li>vₙ = uₙ − l est géométrique de raison a</li>
+            <li>Convergence : si |q| &lt; 1, uₙ→0. Si q≥1, diverge</li>
+            <li>Raisonnement par récurrence : initialisation → hérédité</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Probabilités — loi binomiale & loi normale <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">Loi binomiale B(n,p) : P(X=k) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ</div>
+          <div class="formula math">E(X) = np | σ(X) = √(np(1−p))</div>
+          <div class="formula math">Loi normale N(μ,σ²) : P(μ−σ &lt; X &lt; μ+σ) ≈ 68%</div>
+          <div class="formula math">Intervalle de confiance 95% : p̂ ± 1,96√(p̂(1−p̂)/n)</div>
+          <ul>
+            <li>Loi normale centrée réduite N(0,1) : standardiser avec Z = (X−μ)/σ</li>
+            <li>Test d'hypothèse : H₀ (hypothèse nulle), région de rejet au seuil α</li>
+            <li>Variable aléatoire continue vs discrète (f(x) densité de probabilité)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Géométrie dans l'espace — vecteurs & plans <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">Produit scalaire : u⃗·v⃗ = x₁x₂ + y₁y₂ + z₁z₂ = |u⃗||v⃗|cos θ</div>
+          <div class="formula math">Équation de plan : ax + by + cz + d = 0 (vecteur normal n⃗(a,b,c))</div>
+          <div class="formula math">Distance point-plan : d = |ax₀+by₀+cz₀+d| / √(a²+b²+c²)</div>
+          <ul>
+            <li>Droite paramétrique : M = A + t·v⃗ (t∈ℝ)</li>
+            <li>Colinéarité : u⃗ ∥ v⃗ ⟺ u⃗ = λv⃗</li>
+            <li>Orthogonalité : u⃗ ⊥ v⃗ ⟺ u⃗·v⃗ = 0</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Nombres complexes <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">z = a + ib | |z|² = a² + b² | z̄ = a − ib</div>
+          <div class="formula math">Forme trigonométrique : z = r(cos θ + i sin θ) = r·e^(iθ)</div>
+          <div class="formula math">Formule d'Euler : e^(iθ) = cos θ + i sin θ</div>
+          <ul>
+            <li>Multiplication : |z₁z₂| = |z₁||z₂| et arg(z₁z₂) = arg(z₁) + arg(z₂)</li>
+            <li>Formule de Moivre : (e^(iθ))ⁿ = e^(inθ)</li>
+            <li>Racines nièmes de l'unité : zₖ = e^(2ikπ/n) pour k=0,...,n−1</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Algèbre linéaire — matrices & systèmes <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li>Opérations sur matrices : addition, produit (lignes × colonnes), transposée</li>
+            <li>Matrice inverse A⁻¹ : AA⁻¹ = I | det(A) ≠ 0</li>
+            <li>Résolution AX = B : X = A⁻¹B (si A inversible)</li>
+          </ul>
+          <div class="formula math">det([[a,b],[c,d]]) = ad − bc</div>
+          <p>Pivot de Gauss : substitution successive pour résoudre les systèmes.</p>
+        </div>
+      </div>
+
+    </div><!-- /math-cours -->
+
+    <!-- QCM MATHS -->
+    <div class="tab-pane" id="math-qcm">
+      <div class="qcm-toolbar">
+        <label>Nb de questions :</label>
+        <select id="math-nb">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="999">Toutes</option>
+        </select>
+        <button class="btn btn-math" onclick="startQCM('math')">🔀 Tirage aléatoire</button>
+      </div>
+      <div class="score-strip math" id="math-score-strip">
+        <div class="score-big math" id="math-score-big">0/0</div>
+        <div class="score-info">bonnes réponses · <span id="math-pct">0</span>%</div>
+      </div>
+      <div id="math-questions"></div>
+    </div>
+
+    <!-- FORMULAIRE MATHS -->
+    <div class="tab-pane" id="math-formules">
+      <div class="formula-grid">
+        <div class="formula math">DÉRIVÉES : (xⁿ)' = nxⁿ⁻¹ | (e^u)' = u'e^u | (ln u)' = u'/u | (sin u)' = u'cos u | (cos u)' = −u'sin u</div>
+        <div class="formula math">PRODUIT : (uv)' = u'v+uv' | QUOTIENT : (u/v)' = (u'v−uv')/v² | COMPOSÉE : (fog)' = g'×f'og</div>
+        <div class="formula math">INTÉGRALES : ∫xⁿ = xⁿ⁺¹/(n+1) | ∫e^x = e^x | ∫1/x = ln|x| | ∫cos = sin | ∫sin = −cos</div>
+        <div class="formula math">IPP : ∫u v' = [uv] − ∫u'v | Valeur moy : (1/(b−a))∫f | Aire : ∫|f−g|</div>
+        <div class="formula math">SUITES : arithm. uₙ=u₀+nr, Sₙ=(n+1)(u₀+uₙ)/2 | géom. uₙ=u₀qⁿ, Sₙ=u₀(1−qⁿ⁺¹)/(1−q)</div>
+        <div class="formula math">PROBAS : B(n,p) E=np σ=√(np(1−p)) | N(μ,σ²) IC95% : p̂±1,96√(p̂(1−p̂)/n)</div>
+        <div class="formula math">COMPLEXES : z=a+ib |z|=√(a²+b²) z̄=a−ib | forme exp : r·e^(iθ) | Euler : e^(iθ)=cosθ+isinθ</div>
+        <div class="formula math">VECTEURS : u⃗·v⃗=x₁x₂+y₁y₂+z₁z₂ | plan ax+by+cz+d=0 | dist = |ax₀+by₀+cz₀+d|/√(a²+b²+c²)</div>
+        <div class="formula math">ÉQ. DIFF : y'=ay → y=Ke^(at) | y'=ay+b → y=Ke^(at)−b/a | y''+ω²y=0 → Acos+Bsin</div>
+      </div>
+    </div>
+
+    <!-- MÉTHODES MATHS -->
+    <div class="tab-pane" id="math-methodes">
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Étude complète d'une fonction <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li><strong>1. Domaine Df</strong> : annuler dénominateurs, ln>0, √≥0</li>
+            <li><strong>2. Parité/périodicité</strong> : f(−x) vs f(x)</li>
+            <li><strong>3. Limites</strong> aux bornes et en ±∞ + asymptotes</li>
+            <li><strong>4. Dérivée</strong> f'(x), tableau de signe, extrema</li>
+            <li><strong>5. Tableau de variations</strong> complet</li>
+            <li><strong>6. Courbe</strong> avec points caractéristiques et asymptotes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Récurrence — structure d'une preuve <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li><strong>Initialisation</strong> : vérifier la propriété P(n₀)</li>
+            <li><strong>Hérédité</strong> : supposer P(n) vraie (hypothèse de récurrence), montrer P(n+1)</li>
+            <li><strong>Conclusion</strong> : par le principe de récurrence, P(n) est vraie pour tout n ≥ n₀</li>
+          </ul>
+        </div>
+      </div>
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Calculer une probabilité conditionnelle <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula math">P(A|B) = P(A∩B) / P(B)</div>
+          <div class="formula math">Formule des probabilités totales : P(A) = Σ P(A|Bᵢ)·P(Bᵢ)</div>
+          <div class="formula math">Bayes : P(Bᵢ|A) = P(A|Bᵢ)·P(Bᵢ) / P(A)</div>
+          <p>Utiliser un arbre pondéré pour visualiser les partitions de l'univers.</p>
+        </div>
+      </div>
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Géométrie analytique — trouver une intersection <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li>Droite ∩ Plan : substituer les paramètres de la droite dans l'équation du plan</li>
+            <li>Plan ∩ Plan : résoudre le système de deux équations (droite d'intersection)</li>
+            <li>Vérifier que les résultats sont bien dans les deux ensembles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page-math -->
+
+<!-- ══════════ PHYSIQUE PAGE ══════════ -->
+<div id="page-phys" class="subject-page">
+  <div class="sp-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="sp-header-text">
+      <h2 style="color:var(--phys-h)">Physique-Chimie</h2>
+      <p>Spécialité Terminale Générale</p>
+    </div>
+  </div>
+  <div class="sp-tabs">
+    <button class="sp-tab active phys" onclick="switchTab('phys','cours')">Cours</button>
+    <button class="sp-tab phys" onclick="switchTab('phys','qcm')">QCM</button>
+    <button class="sp-tab phys" onclick="switchTab('phys','formules')">Formulaire</button>
+    <button class="sp-tab phys" onclick="switchTab('phys','methodes')">Méthodes</button>
+  </div>
+  <div class="sp-content">
+
+    <!-- COURS PHYSIQUE -->
+    <div class="tab-pane active" id="phys-cours">
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Mécanique — lois de Newton <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">2e loi de Newton : Σf⃗ = m·a⃗  (dans un référentiel galiléen)</div>
+          <ul>
+            <li><strong>1ère loi (inertie)</strong> : si Σf⃗ = 0⃗ → vitesse constante</li>
+            <li><strong>3ème loi (réciprocité)</strong> : f⃗(A→B) = −f⃗(B→A)</li>
+            <li>Poids : P⃗ = m·g⃗ (g ≈ 9,81 m/s² sur Terre)</li>
+            <li>Force de frottement fluide : f⃗ = −k·v⃗ (proportionnelle à la vitesse)</li>
+          </ul>
+          <div class="formula phys">Projectile : x = v₀cosα·t | y = v₀sinα·t − ½gt²</div>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Énergie mécanique et travail <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Ec = ½mv² | Ep = mgh | Em = Ec + Ep</div>
+          <div class="formula phys">Travail : W = F·d·cos θ (J)</div>
+          <ul>
+            <li>Théorème travail-énergie : ΔEc = ΣW(forces)</li>
+            <li>Conservation de Em si les forces non conservatives ne travaillent pas</li>
+            <li>Puissance : P = W/t = F·v·cos θ (W)</li>
+            <li>Énergie potentielle élastique : Ep = ½kx²</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Oscillations — pendule et ressort <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Équation du mouvement : ẍ + ω₀²x = 0  →  x(t) = A cos(ω₀t + φ)</div>
+          <div class="formula phys">Ressort : ω₀ = √(k/m) | T₀ = 2π√(m/k)</div>
+          <div class="formula phys">Pendule simple : ω₀ = √(g/l) | T₀ = 2π√(l/g)</div>
+          <ul>
+            <li>Oscillateur amorti : ẍ + 2λẋ + ω₀²x = 0 (λ = facteur d'amortissement)</li>
+            <li>Résonance : ω_r = √(ω₀² − 2λ²)</li>
+            <li>A et φ déterminés par les conditions initiales</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Électricité — circuits et dipôles <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Ohm : U = RI | P = UI = RI² = U²/R</div>
+          <div class="formula phys">Condensateur : i = C·du/dt | Bobine : u = L·di/dt</div>
+          <div class="formula phys">RC : τ = RC | RL : τ = L/R | RLC : ω₀ = 1/√(LC)</div>
+          <ul>
+            <li>Lois de Kirchhoff : ΣI = 0 (nœuds) | ΣU = 0 (mailles)</li>
+            <li>Valeur efficace : U_eff = U_max/√2</li>
+            <li>Impédances : Z_R = R | Z_C = 1/(Cω) | Z_L = Lω</li>
+            <li>Résonance série RLC : ω₀ = 1/√(LC), Q = Lω₀/R</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Optique — ondes et lumière <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Snell-Descartes : n₁ sin i₁ = n₂ sin i₂</div>
+          <div class="formula phys">v = λf | T = 1/f | c = 3×10⁸ m/s | n = c/v</div>
+          <ul>
+            <li>Diffraction : déviation d'autant plus grande que λ/a est grand (a = taille obstacle)</li>
+            <li>Interférences Young : δ = kλ (constructives), δ = (k+½)λ (destructives)</li>
+            <li>Lentille convergente : 1/v − 1/u = 1/f' | γ = v/u</li>
+            <li>Effet Doppler : f_obs = f_source·(c±v_obs)/(c∓v_source)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Thermodynamique <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Gaz parfait : PV = nRT (R = 8,314 J/mol·K)</div>
+          <div class="formula phys">1er principe : ΔU = W + Q</div>
+          <div class="formula phys">2e principe : ΔS ≥ 0 (univers) | S = k·ln Ω</div>
+          <ul>
+            <li>Transformation isotherme : T = cste | Isobare : P = cste | Isochore : V = cste | Adiabatique : Q = 0</li>
+            <li>Énergie interne gaz parfait : ΔU = nCvΔT</li>
+            <li>Transfert thermique : φ = λS(T₂−T₁)/e (conduction)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Chimie — équilibres et cinétique <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Constante d'équilibre : K = Π[produits]^ν / Π[réactifs]^ν</div>
+          <div class="formula phys">Acides-bases : pH = −log[H₃O⁺] | pKa = −log Ka</div>
+          <div class="formula phys">Loi de vitesse : v = k[A]^α[B]^β</div>
+          <ul>
+            <li>Taux d'avancement : τ = x_éq / x_max</li>
+            <li>Tampon : Henderson-Hasselbalch : pH = pKa + log([A⁻]/[HA])</li>
+            <li>Cinétique ordre 1 : [A] = [A]₀·e^(−kt) | t½ = ln2/k</li>
+            <li>Énergie d'activation : k = A·e^(−Ea/RT) (loi d'Arrhenius)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Chimie organique — réactions et mécanismes <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li><strong>Substitution nucléophile (SN)</strong> : Nu: attaque le carbone portant le nucléofuge → SN1 ou SN2</li>
+            <li><strong>Élimination (E)</strong> : formation d'une double liaison, compétition avec SN</li>
+            <li><strong>Addition électrophile (AE)</strong> : sur alcènes — règle de Markovnikov</li>
+            <li><strong>Oxydoréduction</strong> : oxydation = perte d'e⁻ (alcool → aldéhyde/cétone/acide)</li>
+            <li>Estérification : acide carboxylique + alcool ⇌ ester + eau (équilibre)</li>
+            <li>Saponification : ester + HO⁻ → carboxylate + alcool (totale)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Physique quantique et nucléaire <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">Énergie photon : E = hf = hc/λ (h = 6,626×10⁻³⁴ J·s)</div>
+          <div class="formula phys">Énergie-masse : E = mc² (c = 3×10⁸ m/s)</div>
+          <div class="formula phys">Décroissance radioactive : N(t) = N₀·e^(−λt) | t½ = ln2/λ</div>
+          <ul>
+            <li>Désintégrations : α (−2p−2n), β⁻ (n→p+e⁻), β⁺ (p→n+e⁺), γ (énergie)</li>
+            <li>Énergie de liaison : Δm×c² (défaut de masse)</li>
+            <li>Niveaux d'énergie atomiques : ΔE = hf (photon émis ou absorbé)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /phys-cours -->
+
+    <!-- QCM PHYSIQUE -->
+    <div class="tab-pane" id="phys-qcm">
+      <div class="qcm-toolbar">
+        <label>Nb de questions :</label>
+        <select id="phys-nb">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="999">Toutes</option>
+        </select>
+        <button class="btn btn-phys" onclick="startQCM('phys')">🔀 Tirage aléatoire</button>
+      </div>
+      <div class="score-strip phys" id="phys-score-strip">
+        <div class="score-big phys" id="phys-score-big">0/0</div>
+        <div class="score-info">bonnes réponses · <span id="phys-pct">0</span>%</div>
+      </div>
+      <div id="phys-questions"></div>
+    </div>
+
+    <!-- FORMULAIRE PHYSIQUE -->
+    <div class="tab-pane" id="phys-formules">
+      <div class="formula-grid">
+        <div class="formula phys">NEWTON : Σf⃗=ma⃗ | P=mg | W=Fd cosθ | Ec=½mv² | Ep=mgh | Em=Ec+Ep</div>
+        <div class="formula phys">PROJECTILE : x=v₀cosα·t | y=v₀sinα·t−½gt² | portée=v₀²sin2α/g</div>
+        <div class="formula phys">OSCILLATEURS : ω₀=√(k/m) | T=2π/ω₀ | pendule T=2π√(l/g) | x=Acos(ω₀t+φ)</div>
+        <div class="formula phys">ÉLEC : U=RI | P=UI | τ_RC=RC | τ_RL=L/R | ω₀=1/√(LC) | U_eff=U_max/√2</div>
+        <div class="formula phys">OPTIQUE : n=c/v | n₁sini₁=n₂sini₂ | v=λf | lentille 1/v−1/u=1/f'</div>
+        <div class="formula phys">THERMODYNAMIQUE : PV=nRT | ΔU=W+Q | φ=λSΔT/e</div>
+        <div class="formula phys">CHIMIE : pH=−log[H₃O⁺] | K=Π[P]^ν/Π[R]^ν | v=k[A]^α[B]^β | k=Ae^(−Ea/RT)</div>
+        <div class="formula phys">NUCLÉAIRE : E=hf=hc/λ | E=mc² | N=N₀e^(−λt) | t½=ln2/λ</div>
+      </div>
+    </div>
+
+    <!-- MÉTHODES PHYSIQUE -->
+    <div class="tab-pane" id="phys-methodes">
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Résoudre un problème de mécanique <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li><strong>1. Schéma</strong> : représenter le système, les forces, le référentiel</li>
+            <li><strong>2. Bilan des forces</strong> : poids, réaction normale, frottement, tension...</li>
+            <li><strong>3. Appliquer Newton</strong> : Σf⃗ = ma⃗ (projeter sur les axes)</li>
+            <li><strong>4. Résoudre</strong> les équations différentielles ou algébriques</li>
+            <li><strong>5. Conditions initiales</strong> : position et vitesse à t=0</li>
+            <li><strong>6. Vérifier</strong> les dimensions et le sens physique du résultat</li>
+          </ul>
+        </div>
+      </div>
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Analyser un circuit électrique <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <ul>
+            <li>Identifier les mailles, les nœuds, les dipôles</li>
+            <li>Appliquer les lois de Kirchhoff (courants aux nœuds, tensions aux mailles)</li>
+            <li>Écrire l'équation différentielle si condensateur ou bobine</li>
+            <li>Résoudre : solution homogène + solution particulière</li>
+            <li>Appliquer la condition initiale</li>
+          </ul>
+        </div>
+      </div>
+      <div class="fiche">
+        <div class="fiche-header" onclick="toggleFiche(this)">Dosage — calcul de concentration <span class="chev">▼</span></div>
+        <div class="fiche-body">
+          <div class="formula phys">À l'équivalence : n_acide = n_base (réaction 1:1)</div>
+          <div class="formula phys">n = C × V (mol = mol/L × L)</div>
+          <ul>
+            <li>Point d'équivalence : dérivée de la courbe de pH max ou indicateur coloré</li>
+            <li>Avant l'équivalence : réactif en excès est le réactif titré</li>
+            <li>Après l'équivalence : réactif en excès est le réactif titrant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page-phys -->
+
+<!-- ══════════ BANQUE QCM ══════════ -->
+<script>
+var QCM = {
+
+math: [
+  {q:"Dérivée de f(x) = 5x³ − 3x + 2 ?", opts:["15x² − 3","5x² − 3","15x³ − 3","5x² − 3x"], ans:0, exp:"(5x³)' = 15x², (−3x)' = −3, (2)' = 0 → f'(x) = 15x² − 3."},
+  {q:"∫₀³ 2x dx = ?", opts:["9","6","18","3"], ans:0, exp:"[x²]₀³ = 9 − 0 = 9."},
+  {q:"Suite géométrique : u₀ = 2, q = 3. Valeur de u₄ ?", opts:["162","54","81","486"], ans:0, exp:"u₄ = u₀ × q⁴ = 2 × 81 = 162."},
+  {q:"E(X) pour X ~ B(20 ; 0,3) ?", opts:["6","0,3","14","9"], ans:0, exp:"E(X) = np = 20 × 0,3 = 6."},
+  {q:"La dérivée de ln(3x) est :", opts:["1/x","3/x","ln(3)/x","1/(3x)"], ans:0, exp:"ln(3x) = ln3 + ln(x). Dérivée = 0 + 1/x = 1/x."},
+  {q:"Que vaut e^(iπ) ?", opts:["−1","1","i","0"], ans:0, exp:"Formule d'Euler : e^(iπ) = cos π + i sin π = −1 + 0 = −1. (Identité d'Euler)"},
+  {q:"Si u⃗·v⃗ = 0, alors u⃗ et v⃗ sont :", opts:["Orthogonaux","Colinéaires","Égaux","Opposés"], ans:0, exp:"Le produit scalaire nul signifie que cos θ = 0, donc θ = 90° : les vecteurs sont orthogonaux."},
+  {q:"La suite (uₙ) définie par uₙ₊₁ = 0,5uₙ avec u₀ = 10 converge vers :", opts:["0","10","5","∞"], ans:0, exp:"Suite géométrique de raison q = 0,5. Comme |q| < 1, uₙ → 0."},
+  {q:"Valeur de ∫ e^(2x) dx ?", opts:["e^(2x)/2 + C","2e^(2x) + C","e^(2x) + C","e^x/2 + C"], ans:0, exp:"∫ e^(ax) dx = e^(ax)/a + C. Ici a=2 → e^(2x)/2 + C."},
+  {q:"La dérivée de f(x) = x·e^x est :", opts:["(x+1)e^x","xe^x","e^x","(x−1)e^x"], ans:0, exp:"Règle du produit (uv)' = u'v + uv'. u=x u'=1, v=e^x v'=e^x → e^x + xe^x = (x+1)e^x."},
+  {q:"lim(x→+∞) (e^x / x²) = ?", opts:["+∞","1","0","2"], ans:0, exp:"Croissances comparées : e^x domine toute puissance de x en +∞. La limite est +∞."},
+  {q:"Dans B(n,p), la variance est :", opts:["np(1−p)","np","n²p","√(np)"], ans:0, exp:"V(X) = np(1−p). L'écart-type est σ = √(np(1−p))."},
+  {q:"Équation de la tangente à f(x)=x² en x=3 ?", opts:["y = 6x − 9","y = 9x − 3","y = 6x + 3","y = 3x − 9"], ans:0, exp:"f(3) = 9, f'(3) = 6. Tangente : y = f(a) + f'(a)(x−a) = 9 + 6(x−3) = 6x − 9."},
+  {q:"Solution de y' + y = 0 avec y(0) = 4 ?", opts:["y = 4e^(−t)","y = 4e^t","y = e^(−4t)","y = 4"], ans:0, exp:"y' + y = 0 → y = Ke^(−t). y(0) = K = 4 → y = 4e^(−t)."},
+  {q:"arg(z) = π/2 signifie que z est :", opts:["Imaginaire pur positif","Réel positif","Réel négatif","Imaginaire pur négatif"], ans:0, exp:"arg(z) = π/2 → z = r·e^(iπ/2) = r·i avec r > 0. C'est un imaginaire pur positif."},
+  {q:"Somme des termes d'une suite géométrique u₀=1, q=2, n=4 termes (u₀ à u₃) ?", opts:["15","16","31","7"], ans:0, exp:"S = u₀(1−q⁴)/(1−q) = 1×(1−16)/(1−2) = (−15)/(−1) = 15."},
+  {q:"La dérivée de cos²(x) est :", opts:["−sin(2x)","2cos(x)","sin²(x)","−2cos(x)sin(x)"], ans:0, exp:"f(x) = (cos x)². f'(x) = 2cos(x)×(−sin(x)) = −2cos(x)sin(x) = −sin(2x)."},
+  {q:"Intervalle de confiance à 95% : p̂ = 0,4, n = 400. Marge d'erreur ≈ ?", opts:["0,048","0,048","0,04","0,02"], ans:0, exp:"Marge = 1,96√(0,4×0,6/400) = 1,96√(0,0006) = 1,96×0,0245 ≈ 0,048."},
+  {q:"La droite d'équation x + 2y − 4 = 0 a pour vecteur normal :", opts:["(1 ; 2)","(2 ; 1)","(1 ; −2)","(−1 ; 2)"], ans:0, exp:"Une droite ax + by + c = 0 a pour vecteur normal (a ; b). Ici a=1, b=2 → (1 ; 2)."},
+  {q:"∫₁² ln(x) dx = ?", opts:["2ln2−1","ln2","1","2ln2"], ans:0, exp:"IPP : u=ln(x), v'=1 → [x ln(x)]₁² − ∫₁² 1 dx = 2ln2 − [x]₁² = 2ln2 − 1."},
+  {q:"det([[2,3],[1,4]]) = ?", opts:["5","11","8","−5"], ans:0, exp:"det = ad − bc = 2×4 − 3×1 = 8 − 3 = 5."},
+  {q:"La période T₀ d'un ressort (m=0,5 kg, k=50 N/m) est :", opts:["≈ 0,628 s","≈ 1 s","≈ 0,1 s","≈ 2 s"], ans:0, exp:"ω₀ = √(k/m) = √(100) = 10 rad/s. T₀ = 2π/10 ≈ 0,628 s."},
+  {q:"f(x) = x³ − 3x. En quel point f admet-elle un maximum local ?", opts:["x = −1","x = 1","x = 0","x = 3"], ans:0, exp:"f'(x) = 3x² − 3 = 0 → x = ±1. f''(x) = 6x. f''(−1) = −6 < 0 → maximum en x = −1."},
+  {q:"Quelle est la solution de y'' + 4y = 0 ?", opts:["A cos(2t) + B sin(2t)","Ae^(2t)","A cos(4t)","Ae^(−4t)"], ans:0, exp:"y'' + ω₀²y = 0 avec ω₀² = 4, ω₀ = 2. Solution : A cos(2t) + B sin(2t)."},
+  {q:"Si z = 1 + i√3, l'argument de z est :", opts:["π/3","π/4","π/6","2π/3"], ans:0, exp:"z = 1 + i√3 → |z| = √(1+3) = 2. cos θ = 1/2 et sin θ = √3/2 → θ = π/3."},
+  {q:"Combien de racines complexes a le polynôme z² + 1 = 0 ?", opts:["2 (i et −i)","0","1","4"], ans:0, exp:"z² = −1 → z = ±i. Tout polynôme de degré n a exactement n racines complexes (comptées avec multiplicité)."},
+  {q:"Règle de l'Hôpital : lim(x→0) sin(x)/x = ?", opts:["1","0","∞","−1"], ans:0, exp:"Forme 0/0. L'Hôpital : lim cos(x)/1 = cos(0) = 1."},
+  {q:"La variance V(X) = E(X²) − [E(X)]². Si E(X) = 3 et E(X²) = 13, V(X) = ?", opts:["4","10","9","16"], ans:0, exp:"V(X) = 13 − 3² = 13 − 9 = 4. L'écart-type σ = 2."},
+  {q:"Le point fixe de uₙ₊₁ = 0,4uₙ + 6 est :", opts:["10","6","15","4"], ans:0, exp:"Point fixe l : l = 0,4l + 6 → 0,6l = 6 → l = 10."},
+  {q:"La dérivée de f(x) = e^(sin x) est :", opts:["cos(x)·e^(sin x)","sin(x)·e^(cos x)","e^(cos x)","−sin(x)·e^(sin x)"], ans:0, exp:"(e^u)' = u'e^u avec u = sin x, u' = cos x → f'(x) = cos(x)·e^(sin x)."},
+  {q:"P(A∩B) = 0,12, P(B) = 0,4. P(A|B) = ?", opts:["0,3","0,48","0,3","0,08"], ans:0, exp:"P(A|B) = P(A∩B)/P(B) = 0,12/0,4 = 0,3."},
+],
+
+phys: [
+  {q:"Un objet de masse 2 kg subit une résultante F = 10 N. Son accélération est :", opts:["5 m/s²","20 m/s²","0,2 m/s²","12 m/s²"], ans:0, exp:"2e loi de Newton : a = F/m = 10/2 = 5 m/s²."},
+  {q:"Valeur efficace d'un signal sinusoïdal d'amplitude 20 V :", opts:["14,1 V","20 V","10 V","28,3 V"], ans:0, exp:"U_eff = U_max/√2 = 20/1,414 ≈ 14,1 V."},
+  {q:"pH d'un acide fort HCl à 0,001 mol/L :", opts:["3","11","1","6"], ans:0, exp:"HCl est un acide fort qui se dissocie totalement → [H₃O⁺] = 0,001 = 10⁻³ mol/L → pH = 3."},
+  {q:"Constante de temps τ d'un circuit RC avec R=5kΩ, C=20µF :", opts:["0,1 s","100 s","0,04 s","25 s"], ans:0, exp:"τ = RC = 5000 × 20×10⁻⁶ = 0,1 s."},
+  {q:"Durée de demi-vie d'un noyau avec λ = 0,0693 s⁻¹ :", opts:["10 s","1 s","100 s","0,1 s"], ans:0, exp:"t½ = ln2/λ = 0,693/0,0693 = 10 s."},
+  {q:"Énergie cinétique d'un objet m=3 kg à v=4 m/s :", opts:["24 J","48 J","12 J","6 J"], ans:0, exp:"Ec = ½mv² = ½ × 3 × 16 = 24 J."},
+  {q:"Période d'un pendule de longueur l = 1 m (g=9,81 m/s²) :", opts:["2,0 s","1,0 s","3,14 s","0,5 s"], ans:0, exp:"T = 2π√(l/g) = 2π√(1/9,81) = 2π×0,319 ≈ 2,0 s."},
+  {q:"Snell-Descartes : eau (n=1,33) → air (n=1), i₁ = 30°. i₂ = ?", opts:["41,7°","22,4°","30°","90°"], ans:0, exp:"n₁ sin i₁ = n₂ sin i₂ → sin i₂ = 1,33 × sin30° = 1,33 × 0,5 = 0,665 → i₂ ≈ 41,7°."},
+  {q:"Dans PV = nRT (T=300 K, n=1 mol, V=25 L). P = ?", opts:["≈ 100 kPa","25 kPa","300 kPa","8,31 kPa"], ans:0, exp:"P = nRT/V = 1×8,314×300/(25×10⁻³) = 2494/0,025 ≈ 99 750 Pa ≈ 100 kPa."},
+  {q:"Énergie d'un photon de longueur d'onde 500 nm (h=6,626×10⁻³⁴, c=3×10⁸) :", opts:["3,98×10⁻¹⁹ J","6,63×10⁻¹⁹ J","1,99×10⁻¹⁹ J","5×10⁻¹⁹ J"], ans:0, exp:"E = hc/λ = (6,626×10⁻³⁴ × 3×10⁸)/(500×10⁻⁹) = 1,988×10⁻²⁵/5×10⁻⁷ ≈ 3,98×10⁻¹⁹ J."},
+  {q:"Travail du poids d'un objet de 5 kg tombant de h=3 m (g=10) :", opts:["150 J","50 J","15 J","300 J"], ans:0, exp:"W = mgh = 5 × 10 × 3 = 150 J. Le poids fait un travail moteur lors d'une chute."},
+  {q:"Fréquence de coupure d'un filtre RC passe-bas (R=10kΩ, C=1nF) :", opts:["15,9 kHz","10 kHz","1,59 MHz","100 Hz"], ans:0, exp:"fc = 1/(2πRC) = 1/(2π×10⁴×10⁻⁹) ≈ 15 915 Hz ≈ 15,9 kHz."},
+  {q:"Résonance d'un circuit RLC série : L=0,1H, C=10µF. ω₀ = ?", opts:["1000 rad/s","100 rad/s","316 rad/s","10 000 rad/s"], ans:0, exp:"ω₀ = 1/√(LC) = 1/√(10⁻¹ × 10⁻⁵) = 1/√(10⁻⁶) = 1/10⁻³ = 1000 rad/s."},
+  {q:"Ordre d'une réaction : si la concentration double et la vitesse quadruple, l'ordre est :", opts:["2","1","0","3"], ans:0, exp:"v = k[A]^n. Si [A]×2 → v×4 = v×2² → n = 2. Réaction d'ordre 2."},
+  {q:"Un objet lancé horizontalement (v₀=10 m/s, h=20 m). Durée de chute (g=10) :", opts:["2 s","4 s","1 s","√2 s"], ans:0, exp:"h = ½gt² → t = √(2h/g) = √(40/10) = √4 = 2 s."},
+  {q:"Portée horizontale de l'objet précédent :", opts:["20 m","40 m","10 m","200 m"], ans:0, exp:"x = v₀ × t = 10 × 2 = 20 m."},
+  {q:"Loi d'Arrhenius : si T augmente, k (constante de vitesse) :", opts:["Augmente exponentiellement","Diminue","Reste constant","Augmente linéairement"], ans:0, exp:"k = A·e^(−Ea/RT). Quand T augmente, l'exposant −Ea/RT devient moins négatif → e^x augmente → k augmente."},
+  {q:"pH d'un mélange tampon avec [HA] = 0,1 M, [A⁻] = 0,1 M et pKa = 5 :", opts:["5","7","4","6"], ans:0, exp:"Henderson-Hasselbalch : pH = pKa + log([A⁻]/[HA]) = 5 + log(1) = 5 + 0 = 5."},
+  {q:"Réflexion totale : l'angle critique i_c entre verre (n=1,5) et air (n=1) est :", opts:["≈ 41,8°","≈ 30°","≈ 45°","≈ 60°"], ans:0, exp:"sin i_c = n₂/n₁ = 1/1,5 = 0,667 → i_c = arcsin(0,667) ≈ 41,8°."},
+  {q:"Énergie stockée dans un condensateur C=100µF chargé à U=50V :", opts:["0,125 J","0,25 J","2,5 J","5 J"], ans:0, exp:"E = ½CU² = ½ × 10⁻⁴ × 2500 = 0,125 J."},
+  {q:"Accélération d'un pendule simple en A(θ petit) :", opts:["−(g/l)·x","g·l·x","(l/g)·x","−g·x"], ans:0, exp:"Pour de faibles oscillations : θ'' = −(g/l)θ → a = ẍ = −(g/l)x. C'est un oscillateur harmonique."},
+  {q:"Un noyau ₂₆⁵⁶Fe a combien de neutrons ?", opts:["30","26","56","28"], ans:0, exp:"Le nombre de masse A = 56 = protons Z + neutrons N. Z = 26 → N = 56 − 26 = 30."},
+  {q:"La pression dans un gaz parfait triple. Si V est constant, T est multipliée par :", opts:["3","1/3","9","√3"], ans:0, exp:"PV = nRT, V constant → P/T = nR/V = cste → P₂/T₂ = P₁/T₁ → T₂ = T₁×(P₂/P₁) = 3T₁."},
+  {q:"Tension aux bornes d'un condensateur à t=0 dans un circuit RC (charge) :", opts:["0 V","E (tension générateur)","E/2","E/e"], ans:0, exp:"À t=0, le condensateur est déchargé (si non préchargé) : u_C(0) = 0. Il se charge progressivement vers E."},
+  {q:"L'estérification entre acide acétique et éthanol est :", opts:["Lente, incomplète et athermique","Rapide et totale","Instantanée","Totale en milieu basique"], ans:0, exp:"L'estérification est une réaction lente, limitée (équilibre) et athermique (ΔH ≈ 0). La saponification, elle, est totale."},
+  {q:"Vitesse angulaire ω₀ d'un ressort (k = 400 N/m, m = 100 g) :", opts:["63,2 rad/s","2 rad/s","20 rad/s","200 rad/s"], ans:0, exp:"ω₀ = √(k/m) = √(400/0,1) = √4000 = 63,2 rad/s."},
+  {q:"Demi-vie du carbone-14 est d'environ 5730 ans. Après 11460 ans, il reste :", opts:["25 % de N₀","50 % de N₀","12,5 % de N₀","75 % de N₀"], ans:0, exp:"11460 = 2 × 5730 = 2 demi-vies. Après 1 demi-vie : N₀/2. Après 2 : N₀/4 = 25%."},
+  {q:"Ordre de grandeur de l'énergie de liaison d'un noyau par nucléon :", opts:["~8 MeV","~8 eV","~8 keV","~8 GeV"], ans:0, exp:"L'énergie de liaison par nucléon est typiquement de l'ordre de 8 MeV pour les noyaux stables (fer : ~8,8 MeV)."},
+  {q:"Dans un oscillateur amorti, que représente le facteur de qualité Q ?", opts:["Le nombre d'oscillations avant que l'amplitude soit divisée par e^π","La fréquence propre","L'amortissement critique","La période d'oscillation"], ans:0, exp:"Q = ω₀/(2λ). Plus Q est grand, moins l'oscillateur est amorti et plus il oscille longtemps."},
+  {q:"Lors d'une désintégration β⁻, un neutron devient :", opts:["Un proton + un électron + un antineutrino","Un proton seul","Une particule α","Un proton + un positon"], ans:0, exp:"β⁻ : n → p + e⁻ + ν̄ₑ (antineutrino). Le numéro atomique Z augmente de 1, A reste constant."},
+  {q:"La concentration d'un acide HA à pH = 4 (acide fort) est :", opts:["10⁻⁴ mol/L","4 mol/L","10⁴ mol/L","0,4 mol/L"], ans:0, exp:"Acide fort totalement dissocié : pH = −log[H₃O⁺] = 4 → [H₃O⁺] = 10⁻⁴ mol/L = [HA]₀."},
+],
+
+};
+
+// ─── ÉTAT GLOBAL ───────────────────────────────
+var G = { math: {a:0,c:0,t:0}, phys: {a:0,c:0,t:0} };
+
+// ─── NAVIGATION ────────────────────────────────
+function goHome() {
+  document.getElementById('page-home').style.display = 'block';
+  document.querySelectorAll('.subject-page').forEach(function(p){ p.classList.remove('active'); });
+}
+function openSubject(subj) {
+  document.getElementById('page-home').style.display = 'none';
+  document.querySelectorAll('.subject-page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('page-' + subj).classList.add('active');
+  window.scrollTo(0,0);
+}
+function switchTab(subj, tab) {
+  var page = document.getElementById('page-' + subj);
+  page.querySelectorAll('.sp-tab').forEach(function(t){ t.classList.remove('active'); });
+  page.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  // activer l'onglet
+  page.querySelectorAll('.sp-tab').forEach(function(t){
+    if (t.getAttribute('onclick') === "switchTab('" + subj + "','" + tab + "')") t.classList.add('active');
+  });
+  var tp = document.getElementById(subj + '-' + tab);
+  if (tp) tp.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ─── ACCORDÉON ─────────────────────────────────
+function toggleFiche(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ─── QCM ───────────────────────────────────────
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function startQCM(subj) {
+  var nbEl = document.getElementById(subj + '-nb');
+  var nb = Math.min(parseInt(nbEl.value), QCM[subj].length);
+  var pool = shuffle(QCM[subj]).slice(0, nb);
+
+  G[subj] = { a: 0, c: 0, t: pool.length };
+  updateScore(subj);
+
+  var strip = document.getElementById(subj + '-score-strip');
+  strip.style.display = 'flex';
+
+  var container = document.getElementById(subj + '-questions');
+  container.innerHTML = '';
+
+  pool.forEach(function(q, qi) {
+    // mélanger les options
+    var origIdxs = q.opts.map(function(_, i){ return i; });
+    var shuffled = shuffle(origIdxs);
+    var newAns = shuffled.indexOf(q.ans);
+
+    var optsHtml = shuffled.map(function(oi, ni) {
+      return '<button class="opt" data-ni="' + ni + '" onclick="answer(this,\'' + subj + '\',' + newAns + ',' + pool.length + ',' + qi + ')">' + q.opts[oi] + '</button>';
+    }).join('');
+
+    var div = document.createElement('div');
+    div.className = 'qitem';
+    div.innerHTML =
+      '<div class="qitem-q"><span class="qnum">Q' + (qi+1) + '.</span>' + q.q + '</div>' +
+      '<div class="opts" data-exp="' + encodeURIComponent(q.exp) + '">' + optsHtml + '</div>' +
+      '<div class="fb" id="fb-' + subj + '-' + qi + '"></div>';
+    container.appendChild(div);
+  });
+
+  container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function answer(btn, subj, correctNI, total, qi) {
+  var opts = btn.parentElement;
+  if (opts.querySelector('.opt[disabled]')) return;
+
+  var chosen = parseInt(btn.getAttribute('data-ni'));
+  var ok = chosen === correctNI;
+  var exp = decodeURIComponent(opts.getAttribute('data-exp'));
+
+  opts.querySelectorAll('.opt').forEach(function(o) {
+    o.disabled = true;
+    var ni = parseInt(o.getAttribute('data-ni'));
+    if (ni === correctNI) o.classList.add('correct');
+    else if (o === btn && !ok) o.classList.add('wrong');
+  });
+
+  var fb = document.getElementById('fb-' + subj + '-' + qi);
+  fb.style.display = 'block';
+  fb.className = 'fb ' + (ok ? 'ok' : 'ko');
+  fb.textContent = (ok ? '✓ Correct ! ' : '✗ Incorrect. ') + exp;
+
+  G[subj].a++;
+  if (ok) G[subj].c++;
+  updateScore(subj);
+  updateTopbar();
+}
+
+function updateScore(subj) {
+  var bigEl = document.getElementById(subj + '-score-big');
+  var pctEl = document.getElementById(subj + '-pct');
+  if (bigEl) bigEl.textContent = G[subj].c + '/' + G[subj].t;
+  var pct = G[subj].a > 0 ? Math.round(G[subj].c / G[subj].a * 100) : 0;
+  if (pctEl) pctEl.textContent = pct;
+}
+function updateTopbar() {
+  var total = G.math.a + G.phys.a;
+  document.getElementById('topbar-prog').textContent = total + ' réponse' + (total > 1 ? 's' : '');
+  document.getElementById('stat-rep').textContent = total;
+}
+</script>
+
+</body>
+</html>
